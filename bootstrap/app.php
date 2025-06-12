@@ -1,5 +1,8 @@
 <?php
 
+if (!file_exists(__DIR__ . '/../vendor/autoload.php')) {
+    die('Please run "composer install" to install dependencies.');
+}
 require_once __DIR__ . '/../vendor/autoload.php';
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(

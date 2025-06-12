@@ -46,8 +46,12 @@ The project follows a standard Lumen (Laravel micro-framework) structure, enhanc
     ```bash
     cp .env.example .env
     ```
+3.  **Run composer**:
+    ```bash
+    composer install
+    ```
 
-3.  **Build and start the services**:
+4.  **Build and start the services**:
     ```bash
     docker compose up -d --build
     ```
