@@ -145,7 +145,7 @@ For performance testing of the CSV upload functionality, you can use the provide
 -   **Expected Behavior**: The API should return a `202 Accepted` status with a `task_id`. The worker should then process the file in the background. You can check the status using the `GET /api/v1/task/{taskId}` endpoint.
 
 ## Future Improvements:
-
+    -   Add .env APP_KEY generation
     -   Replace Redis queue with RabbitMQ for better scalability.
     -   Implement dead letter queues for failed tasks.
     -   Add token refresh mechanism.
