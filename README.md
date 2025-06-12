@@ -47,12 +47,7 @@ The project follows a standard Lumen (Laravel micro-framework) structure, enhanc
     cp .env.example .env
     ```
 
-3.  **Generate application key**:
-    ```bash
-    docker compose run --rm app php artisan key:generate
-    ```
-
-4.  **Build and start the services**:
+3.  **Build and start the services**:
     ```bash
     docker compose up -d --build
     ```
