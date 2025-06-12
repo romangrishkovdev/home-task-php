@@ -1,0 +1,300 @@
+openapi: 3.0.0
+info:
+  title: Calculation & CSV API
+  version: 1.0.0
+  description: API for calculations and asynchronous CSV processing
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+paths:
+  /api/v1/auth/token:
+    post:
+      summary: Generate JWT token
+      tags: [Authentication]
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+      responses:
+        '200':
+          description: JWT token generated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                  message:
+                    type: string
+
+  /api/v1/calculation:
+    post:
+      summary: Perform calculation
+      tags: [Calculation]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [integers, floats, booleans, strings]
+              properties:
+                integers:
+                  type: array
+                  items:
+                    type: integer
+                floats:
+                  type: array
+                  items:
+                    type: number
+                    format: float
+                booleans:
+                  type: array
+                  items:
+                    type: boolean
+                strings:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Calculation successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  integer_sum:
+                    type: integer
+                  float_average:
+                    type: number
+                    format: float
+                  boolean_true_count:
+                    type: integer
+                  numeric_string_sum:
+                    type: integer
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                  message:
+                    type: string
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                  message:
+                    type: object
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                  message:
+                    type: string
+
+  /api/v1/task:
+    post:
+      summary: Upload CSV file for async processing
+      tags: [Tasks]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [csv]
+              properties:
+                csv:
+                  type: string
+                  format: binary
+      responses:
+        '202':
+          description: Task accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  task_id:
+                    type: string
+                  status:
+                    type: string
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  /api/v1/task/{taskId}:
+    get:
+      summary: Get task status
+      tags: [Tasks]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Task completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  row_count:
+                    type: integer
+                  column_count:
+                    type: integer
+                  headers:
+                    type: array
+                    items:
+                      type: string
+        '202':
+          description: Task processing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  /health:
+    get:
+      summary: Health check endpoint
+      tags: [System]
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+        '500':
+          description: Service is unhealthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+
+  /api/v1/docs:
+    get:
+      summary: Swagger UI
+      tags: [Documentation]
+      responses:
+        '200':
+          description: Swagger UI HTML
+          content:
+            text/html:
+              schema:
+                type: string
+
+  /api/v1/openapi.yaml:
+    get:
+      summary: OpenAPI YAML
+      tags: [Documentation]
+      responses:
+        '200':
+          description: OpenAPI YAML
+          content:
+            application/yaml:
+              schema:
+                type: string
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 

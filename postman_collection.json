@@ -1,0 +1,477 @@
+{
+    "info": {
+        "_postman_id": "a1b2c3d4-e5f6-7890",
+        "name": "Calculation & CSV API",
+        "description": "API for calculations and CSV processing",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Authentication",
+            "item": [
+                {
+                    "name": "Get Token",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"username\": \"test\",\n    \"password\": \"test\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:8080/api/v1/auth/token",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "8080",
+                            "path": [
+                                "api",
+                                "v1",
+                                "auth",
+                                "token"
+                            ]
+                        },
+                        "description": "Get JWT token for authorization"
+                    },
+                    "response": [
+                        {
+                            "name": "Success",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"username\": \"test\",\n    \"password\": \"test\"\n}"
+                                },
+                                "url": {
+                                    "raw": "http://localhost:8080/api/v1/auth/token"
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...\"\n}"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Health Check",
+            "item": [
+                {
+                    "name": "Check Health",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:8080/health",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "8080",
+                            "path": [
+                                "health"
+                            ]
+                        },
+                        "description": "Check API health status"
+                    },
+                    "response": [
+                        {
+                            "name": "Success",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "http://localhost:8080/health"
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"status\": \"ok\"\n}"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Calculations",
+            "item": [
+                {
+                    "name": "Perform Calculation",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "description": "JWT token obtained via /auth/token"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"integers\": [1, 2, 3],\n    \"floats\": [1.5, 2.5, 3.5],\n    \"booleans\": [true, false, true],\n    \"strings\": [\"100\", \"text\", \"200\"]\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:8080/api/v1/calculation",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "8080",
+                            "path": [
+                                "api",
+                                "v1",
+                                "calculation"
+                            ]
+                        },
+                        "description": "Perform mathematical calculation on arrays of integers, floats, booleans, and strings"
+                    },
+                    "response": [
+                        {
+                            "name": "Success",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"integers\": [1, 2, 3],\n    \"floats\": [1.5, 2.5, 3.5],\n    \"booleans\": [true, false, true],\n    \"strings\": [\"100\", \"text\", \"200\"]\n}"
+                                },
+                                "url": {
+                                    "raw": "http://localhost:8080/api/v1/calculation"
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"integer_sum\": 6,\n    \"float_average\": 2.5,\n    \"boolean_true_count\": 2,\n    \"numeric_string_sum\": 300\n}"
+                        },
+                        {
+                            "name": "Validation Error",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"integers\": [\"not_a_number\"],\n    \"floats\": [\"invalid\"],\n    \"booleans\": [\"not_boolean\"],\n    \"strings\": [123]\n}"
+                                },
+                                "url": {
+                                    "raw": "http://localhost:8080/api/v1/calculation"
+                                }
+                            },
+                            "status": "Bad Request",
+                            "code": 422,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"status\": false,\n    \"message\": {\n        \"integers\": [\"The integers must be an array of integers.\"],\n        \"floats\": [\"The floats must be an array of numbers.\"],\n        \"booleans\": [\"The booleans must be an array of booleans.\"],\n        \"strings\": [\"The strings must be an array of strings.\"]\n    }\n}"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "CSV Processing",
+            "item": [
+                {
+                    "name": "Upload CSV",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "description": "JWT token obtained via /auth/token"
+                            }
+                        ],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "csv",
+                                    "type": "file",
+                                    "src": "/path/to/your/file.csv"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "http://localhost:8080/api/v1/task",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "8080",
+                            "path": [
+                                "api",
+                                "v1",
+                                "task"
+                            ]
+                        },
+                        "description": "Upload CSV file for asynchronous processing"
+                    },
+                    "response": [
+                        {
+                            "name": "Success",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [
+                                        {
+                                            "key": "csv",
+                                            "type": "file",
+                                            "src": "/path/to/your/file.csv"
+                                        }
+                                    ]
+                                },
+                                "url": {
+                                    "raw": "http://localhost:8080/api/v1/task"
+                                }
+                            },
+                            "status": "Accepted",
+                            "code": 202,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"task_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"row_count\": 102,\n    \"column_count\": 12,\n    \"headers\": [\"Index\", \"Customer Id\", \"First Name\", \"Last Name\", \"Company\", \"City\", \"Country\", \"Phone 1\", \"Phone 2\", \"Email\", \"Subscription Date\", \"Website\"],\n    \"status\": \"processing\"\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Get Task Status",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "description": "JWT token obtained via /auth/token"
+                            }
+                        ],
+                        "url": {
+                            "raw": "http://localhost:8080/api/v1/task/{{taskId}}",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "8080",
+                            "path": [
+                                "api",
+                                "v1",
+                                "task",
+                                "{{taskId}}"
+                            ]
+                        },
+                        "description": "Get status of CSV processing task"
+                    },
+                    "response": [
+                        {
+                            "name": "Processing",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "http://localhost:8080/api/v1/task/{{taskId}}"
+                                }
+                            },
+                            "status": "Accepted",
+                            "code": 202,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"status\": \"processing\",\n    \"row_count\": 102,\n    \"column_count\": 12,\n    \"headers\": [\"Index\", \"Customer Id\", \"First Name\", \"Last Name\", \"Company\", \"City\", \"Country\", \"Phone 1\", \"Phone 2\", \"Email\", \"Subscription Date\", \"Website\"]\n}"
+                        },
+                        {
+                            "name": "Completed",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "http://localhost:8080/api/v1/task/{{taskId}}"
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"row_count\": 100,\n    \"column_count\": 12,\n    \"headers\": [\"Index\", \"Customer Id\", \"First Name\", \"Last Name\", \"Company\", \"City\", \"Country\", \"Phone 1\", \"Phone 2\", \"Email\", \"Subscription Date\", \"Website\"],\n    \"status\": \"completed\"\n}"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Swagger UI",
+            "item": [
+                {
+                    "name": "View Swagger UI",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:8080/api/v1/docs",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "8080",
+                            "path": [
+                                "api",
+                                "v1",
+                                "docs"
+                            ]
+                        },
+                        "description": "View the Swagger UI documentation"
+                    },
+                    "response": [
+                        {
+                            "name": "Success",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "http://localhost:8080/api/v1/docs"
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "html",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "text/html"
+                                }
+                            ],
+                            "body": "<!-- Swagger UI HTML content -->"
+                        }
+                    ]
+                },
+                {
+                    "name": "Download OpenAPI Spec",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:8080/api/v1/openapi.yaml",
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "8080",
+                            "path": [
+                                "api",
+                                "v1",
+                                "openapi.yaml"
+                            ]
+                        },
+                        "description": "Download the OpenAPI specification in YAML format"
+                    },
+                    "response": [
+                        {
+                            "name": "Success",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "http://localhost:8080/api/v1/openapi.yaml"
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "yaml",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/x-yaml"
+                                }
+                            ],
+                            "body": "openapi: 3.0.0\ninfo:\n  title: Calculation & CSV API\n  version: 1.0.0\npaths:\n  /health:\n    get:\n      summary: Check API health\n      responses:\n        '200':\n          description: Health check successful\n  /api/v1/auth/token:\n    post:\n      summary: Get JWT Token\n      requestBody:\n        required: true\n        content:\n          application/json:\n            schema:\n              type: object\n              properties:\n                username:\n                  type: string\n                password:\n                  type: string\n      responses:\n        '200':\n          description: Token obtained successfully\n  /api/v1/calculation:\n    post:\n      summary: Perform Calculations\n      requestBody:\n        required: true\n        content:\n          application/json:\n            schema:\n              type: object\n              properties:\n                integers:\n                  type: array\n                  items:\n                    type: integer\n                floats:\n                  type: array\n                  items:\n                    type: number\n                booleans:\n                  type: array\n                  items:\n                    type: boolean\n                strings:\n                  type: array\n                  items:\n                    type: string\n      responses:\n        '200':\n          description: Calculation successful\n  /api/v1/task:\n    post:\n      summary: Upload CSV File\n      requestBody:\n        required: true\n        content:\n          multipart/form-data:\n            schema:\n              type: object\n              properties:\n                csv:\n                  type: string\n                  format: binary\n      responses:\n        '202':\n          description: CSV file accepted for processing\n  /api/v1/task/{taskId}:\n    get:\n      summary: Get Task Status\n      parameters:\n        - in: path\n          name: taskId\n          required: true\n          schema:\n            type: string\n          description: ID of the task\n      responses:\n        '200':\n          description: Task status retrieved successfully\n        '404':\n          description: Task not found"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "event": [
+        {
+            "listen": "prerequest",
+            "script": {
+                "type": "text/javascript",
+                "exec": [
+                    ""
+                ]
+            }
+        },
+        {
+            "listen": "test",
+            "script": {
+                "type": "text/javascript",
+                "exec": [
+                    ""
+                ]
+            }
+        }
+    ],
+    "variable": [
+        {
+            "key": "token",
+            "value": "",
+            "type": "string",
+            "description": "JWT token for authorization"
+        },
+        {
+            "key": "taskId",
+            "value": "",
+            "type": "string",
+            "description": "Task ID received from CSV upload"
+        }
+    ]
+}
