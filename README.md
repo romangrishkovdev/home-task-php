@@ -32,7 +32,7 @@ The project follows a standard Lumen (Laravel micro-framework) structure, enhanc
 
 - Docker
 - Docker Compose
-- Composer (for local development, if running commands directly on the host)
+- Composer
 
 ## Setup
 
